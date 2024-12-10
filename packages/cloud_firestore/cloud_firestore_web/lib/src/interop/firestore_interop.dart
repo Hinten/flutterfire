@@ -1102,3 +1102,17 @@ extension AggregateQuerySnapshotJsImplExtension
 @JS()
 @staticInterop
 abstract class PersistentCacheIndexManager {}
+
+@JS('VectorValue')
+@staticInterop
+external VectorValueJsImpl get VectorValueConstructor;
+
+@JS('VectorValue')
+@staticInterop
+class VectorValueJsImpl {
+  external factory VectorValueJsImpl(JSArray array);
+}
+
+extension VectorValueJsImplExtension on VectorValueJsImpl {
+  external JSArray toArray();
+}

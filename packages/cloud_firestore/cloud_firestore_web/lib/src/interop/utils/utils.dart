@@ -11,6 +11,7 @@ import '../firestore.dart';
 
 /// Returns Dart representation from JS Object.
 dynamic dartify(dynamic object) {
+
   // Convert JSObject to Dart equivalents directly
   // Cannot be done with Dart 3.2 constraints
   // ignore: invalid_runtime_check_with_js_interop_types
@@ -18,19 +19,26 @@ dynamic dartify(dynamic object) {
     return object;
   }
 
-  final jsObject = object;
+  final JSObject jsObject = object;
 
   if (jsObject.instanceof(DocumentReferenceJsConstructor as JSFunction)) {
     return DocumentReference.getInstance(jsObject as DocumentReferenceJsImpl);
   }
+
   if (jsObject.instanceof(GeoPointConstructor as JSFunction)) {
     return jsObject;
   }
+
+  if (jsObject.instanceof(VectorValueConstructor as JSFunction)) {
+    return jsObject;
+  }
+
   if (jsObject.instanceof(TimestampJsConstructor as JSFunction)) {
     final castedJSObject = jsObject as TimestampJsImpl;
     return Timestamp(
         castedJSObject.seconds.toDartInt, castedJSObject.nanoseconds.toDartInt);
   }
+
   if (jsObject.instanceof(BytesConstructor as JSFunction)) {
     return jsObject as BytesJsImpl;
   }
@@ -57,6 +65,7 @@ dynamic convertNested(dynamic object) {
 
 /// Returns the JS implementation from Dart Object.
 JSAny? jsify(Object? dartObject) {
+
   if (dartObject == null) {
     return dartObject?.jsify();
   }
@@ -96,6 +105,12 @@ JSAny? jsify(Object? dartObject) {
   // Cannot be done with Dart 3.2 constraints
   // ignore: invalid_runtime_check_with_js_interop_types
   if (dartObject is GeoPointJsImpl) {
+    return dartObject as JSAny;
+  }
+
+  // Cannot be done with Dart 3.2 constraints
+  // ignore: invalid_runtime_check_with_js_interop_types
+  if (dartObject is VectorValueJsImpl) {
     return dartObject as JSAny;
   }
 

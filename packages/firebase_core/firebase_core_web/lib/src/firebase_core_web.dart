@@ -238,13 +238,13 @@ class FirebaseCoreWeb extends FirebasePlatform {
 
             If you override the version manually:
               change:
-                <script>window.flutterfire_web_sdk_version = '${firebase.SDK_VERSION}';</script>
+                <script>window.flutterfire_web_sdk_version = 10.13.2;</script>
               to:
-                <script>window.flutterfire_web_sdk_version = '$supportedFirebaseJsSdkVersion';</script>
+                <script>window.flutterfire_web_sdk_version = 10.13.2;</script>
 
             If you import the Firebase scripts in index.html, instead allow FlutterFire to manage this for you by removing
             any Firebase scripts in your web/index.html file:
-                e.g. remove: <script src="https://www.gstatic.com/firebasejs/${firebase.SDK_VERSION}/firebase-app.js"></script>
+                e.g. remove: <script src="https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js"></script>
           ''',
           );
         }

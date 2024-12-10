@@ -17,6 +17,7 @@ import 'package:flutter/services.dart';
 
 import '../method_channel_firestore.dart';
 import '../method_channel_query.dart';
+import 'package:cloud_firestore_platform_interface/src/vector_value.dart';
 
 /// The codec utilized to encode data back and forth between
 /// the Dart application and the native platform.
@@ -43,6 +44,7 @@ class FirestoreMessageCodec extends StandardMessageCodec {
   static const int _kFirestoreInstance = 196;
   static const int _kFirestoreQuery = 197;
   static const int _kFirestoreSettings = 198;
+  static const int _kVectorValue = 199;
 
   static const Map<FieldValueType, int> _kFieldValueCodes =
       <FieldValueType, int>{
@@ -124,6 +126,9 @@ class FirestoreMessageCodec extends StandardMessageCodec {
       buffer.putUint8(_kInfinity);
     } else if (value == double.negativeInfinity) {
       buffer.putUint8(_kNegativeInfinity);
+    }  else if (value is VectorValue) {
+      buffer.putUint8(_kVectorValue);
+      writeValue(buffer, value.toArray());
     } else {
       super.writeValue(buffer, value);
     }
@@ -148,6 +153,8 @@ class FirestoreMessageCodec extends StandardMessageCodec {
             FirebaseFirestorePlatform.instanceFor(
                 app: app, databaseId: databaseId);
         return firestore.doc(path);
+      case _kVectorValue:
+        return VectorValue(readValue(buffer)! as List<double>);
       case _kBlob:
         final int length = readSize(buffer);
         final List<int> bytes = buffer.getUint8List(length);
